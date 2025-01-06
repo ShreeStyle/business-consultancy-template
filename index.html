@@ -3,18 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Business Consultancy </title>
+  <title>Business Consultancy</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-
-
-
+    /* General Preview Styles */
     #preview {
       border: 1px solid #ddd;
       padding: 20px;
       margin-top: 20px;
-      max-width: 600px;
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.5s;
     }
+
+    /* Vertical (Phone) Layout */
+    #preview.vertical {
+      width: 300px;
+      height: 600px;
+    }
+
+    /* Horizontal (Laptop) Layout */
+    #preview.horizontal {
+      width: 600px;
+      height: 300px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-evenly;
+    }
+
+    /* Photo and Logo Styling */
     .photo, .logo {
       width: 100px;
       height: 100px;
@@ -22,26 +45,58 @@
       border-radius: 50%;
     }
 
-    .business-card {
-      text-align: center;
-      font-family: Arial, sans-serif;
-    }
+    /* Details Styling */
     .details {
       margin-top: 15px;
+      text-align: center;
+    }
+
+    /* Adjustments for Horizontal Layout */
+    #preview.horizontal .details {
+      text-align: left;
+      margin-top: 0;
+    }
+
+    .business-card {
+      font-family: Arial, sans-serif;
+    }
+
+    /* Search Results for Background Images */
+    #photo-results {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    #photo-results img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 5px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    #photo-results img:hover {
+      transform: scale(1.1);
+      border-color: #007bff;
     }
   </style>
 </head>
 <body>
-
-
 <div class="container my-5">
+  <h1 class="text-center">Business Consultancy</h1>
 
+  <!-- Search Bar for Pixabay -->
+  <div class="search-container mb-4">
+    <input type="text" id="search-bar" class="form-control" placeholder="Search for a photo">
+    <div id="photo-results"></div>
+  </div>
 
-  <h1 class="text-center">Business Consultancy Page Generator</h1>
-
-
+  <!-- Form -->
   <form id="businessForm" class="my-4">
-
     <div class="mb-3">
       <label for="photo" class="form-label">Upload Personal Photo</label>
       <input type="file" id="photo" class="form-control" accept="image/*">
@@ -67,29 +122,81 @@
       <input type="tel" id="phone" class="form-control">
     </div>
 
-    <button type="button" id="generateBtn" class="btn btn-primary">Generate Design</button>
+    <div class="mb-3">
+      <label for="frameOption" class="form-label">Frame Orientation</label>
+      <select id="frameOption" class="form-select">
+        <option value="vertical">Vertical (Phone)</option>
+        <option value="horizontal">Horizontal (Laptop)</option>
+      </select>
+    </div>
 
+    <button type="button" id="generateBtn" class="btn btn-primary">Generate Design</button>
   </form>
 
- 
-  <div id="preview" class="business-card">
+  <!-- Preview -->
+  <div id="preview" class="business-card vertical">
     <img id="photoPreview" class="photo" alt="Personal Photo">
     <img id="logoPreview" class="logo" alt="Company Logo">
-    <h2 id="companyNamePreview">[Company Name]</h2>
     <div class="details">
+      <h2 id="companyNamePreview">[Company Name]</h2>
       <p>Email: <span id="emailPreview">[Email]</span></p>
       <p>Phone: <span id="phonePreview">[Phone]</span></p>
     </div>
-
   </div>
 </div>
+
 <script>
+  let selectedBackground = null;
+
+  document.getElementById("search-bar").addEventListener("input", async function () {
+    const query = this.value.trim();
+    if (!query) return;
+
+    const apiUrl = `https://pixabay.com/api/?key=38119554-7d46ba50d1cb85f62eae6a024&q=${encodeURIComponent(query)}&image_type=photo`;
+
+    const resultsContainer = document.getElementById("photo-results");
+    resultsContainer.innerHTML = "<p>Loading...</p>";
+
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error("Failed to fetch photos");
+
+      const data = await response.json();
+      resultsContainer.innerHTML = "";
+
+      if (!data.hits || data.hits.length === 0) {
+        resultsContainer.innerHTML = "<p>No results found.</p>";
+        return;
+      }
+
+      data.hits.forEach(photo => {
+        const img = document.createElement("img");
+        img.src = photo.webformatURL;
+        img.alt = photo.tags;
+
+        img.addEventListener("click", () => {
+          selectedBackground = photo.largeImageURL;
+          Array.from(resultsContainer.querySelectorAll("img")).forEach(el => el.style.borderColor = "transparent");
+          img.style.borderColor = "#007bff";
+        });
+
+        resultsContainer.appendChild(img);
+      });
+    } catch (error) {
+      resultsContainer.innerHTML = `<p>Error fetching photos: ${error.message}</p>`;
+    }
+  });
+
   document.getElementById('generateBtn').addEventListener('click', function () {
-  
+    const phone = document.getElementById('phone').value.trim();
+    if (phone.length !== 10 || isNaN(phone)) {
+      alert("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
     document.getElementById('companyNamePreview').textContent = document.getElementById('companyName').value;
     document.getElementById('emailPreview').textContent = document.getElementById('email').value;
-    document.getElementById('phonePreview').textContent = document.getElementById('phone').value;
-
+    document.getElementById('phonePreview').textContent = phone;
 
     const photo = document.getElementById('photo').files[0];
     if (photo) {
@@ -100,7 +207,6 @@
       reader.readAsDataURL(photo);
     }
 
-   
     const logo = document.getElementById('logo').files[0];
     if (logo) {
       const reader = new FileReader();
@@ -109,10 +215,17 @@
       };
       reader.readAsDataURL(logo);
     }
-  })
-  ;
 
+    if (selectedBackground) {
+      document.getElementById('preview').style.backgroundImage = `url(${selectedBackground})`;
+    } else {
+      alert("Please select a background image from the search results.");
+    }
 
+    const frameOption = document.getElementById('frameOption').value;
+    const preview = document.getElementById('preview');
+    preview.className = `business-card ${frameOption}`;
+  });
 </script>
 </body>
 </html>
