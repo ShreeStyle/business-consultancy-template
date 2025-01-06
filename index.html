@@ -51,6 +51,13 @@
       text-align: center;
     }
 
+    /* Wishes/Description Styling */
+    .description-box {
+      margin-top: 10px;
+      font-size: 16px;
+      font-style: italic;
+    }
+
     /* Adjustments for Horizontal Layout */
     #preview.horizontal .details {
       text-align: left;
@@ -130,6 +137,11 @@
       </select>
     </div>
 
+    <div class="mb-3">
+      <label for="description" class="form-label">Description / Wishes</label>
+      <textarea id="description" class="form-control" rows="3" placeholder="Enter your wishes or description here (e.g., Happy Diwali to all...)"></textarea>
+    </div>
+
     <button type="button" id="generateBtn" class="btn btn-primary">Generate Design</button>
   </form>
 
@@ -141,6 +153,9 @@
       <h2 id="companyNamePreview">[Company Name]</h2>
       <p>Email: <span id="emailPreview">[Email]</span></p>
       <p>Phone: <span id="phonePreview">[Phone]</span></p>
+      <div class="description-box">
+        <span id="descriptionPreview">[Your wishes or description will appear here]</span>
+      </div>
     </div>
   </div>
 </div>
@@ -197,6 +212,7 @@
     document.getElementById('companyNamePreview').textContent = document.getElementById('companyName').value;
     document.getElementById('emailPreview').textContent = document.getElementById('email').value;
     document.getElementById('phonePreview').textContent = phone;
+    document.getElementById('descriptionPreview').textContent = document.getElementById('description').value;
 
     const photo = document.getElementById('photo').files[0];
     if (photo) {
