@@ -4,246 +4,211 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Business Marketing Helper</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
   <style>
-    /* Global Body Styling */
     body {
-      background: linear-gradient(to right, #ffb6c1, #ffeb3b); /* Pink and Yellow gradient */
       font-family: Arial, sans-serif;
-      height: 100vh;
       margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: auto; /* Ensure page is scrollable if content overflows */
+      padding: 0;
+      animation: background-cycle 10s infinite;
     }
 
-    /* Form Container Styling */
-    .container {
-      background: rgba(255, 255, 255, 0.8);
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      max-width: 900px;
-      width: 100%;
-      max-height: 80vh; /* Limit form height */
-      overflow-y: auto; /* Scrollable form content */
+    @keyframes background-cycle {
+      0% { background-color: white; }
+      25% { background-color: yellow; }
+      50% { background-color: lightgreen; }
+      75% { background-color: rgb(246, 111, 210); }
+      100% { background-color: white; }
     }
 
-    /* Form Title */
-    h1 {
-      text-align: center;
-      color: #ff1493; /* Pink Color */
-      margin-bottom: 20px;
-    }
-
-    /* Form Elements Styling */
-    .form-label {
-      font-weight: bold;
-      color: #ff1493;
-    }
-
-    .form-control {
-      border-radius: 5px;
-      border: 2px solid #ff1493;
-      margin-bottom: 15px;
-    }
-
-    .form-control:focus {
-      border-color: #ffeb3b; /* Yellow color on focus */
-      box-shadow: 0 0 5px rgba(255, 235, 59, 0.7);
-    }
-
-    /* Button Styling */
-    .btn-primary {
-      background-color: #ff1493;
-      border-color: #ff1493;
-      width: 100%;
-    }
-
-    .btn-primary:hover {
-      background-color: #ff85c0;
-      border-color: #ff85c0;
-    }
-
-    /* Image and Preview Section */
-    #preview {
+    .business-card {
       border: 1px solid #ddd;
       padding: 20px;
-      margin-top: 20px;
-      background-size: cover;
-      background-position: center;
-      color: white;
-      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: all 0.5s;
+      margin: 20px auto;
       border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background-color: #f9f9f9;
+      width: 600px;
     }
 
-    .photo, .logo {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .details {
-      margin-top: 15px;
+    .business-card.vertical {
       text-align: center;
     }
 
-    .description-box {
-      margin-top: 10px;
-      font-size: 16px;
-      font-style: italic;
+    .business-card.horizontal {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
     }
 
-    #photo-results img {
+    .photo-container,
+    .logo-container {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .photo-container img,
+    .logo-container img {
       width: 100px;
       height: 100px;
       object-fit: cover;
-      cursor: pointer;
-      border: 2px solid transparent;
-      border-radius: 5px;
-      transition: transform 0.2s, border-color 0.2s;
+      border-radius: 50%;
+      border: 2px solid #ccc;
     }
 
-    #photo-results img:hover {
-      transform: scale(1.1);
-      border-color: #ff1493; /* Pink hover border */
-    }
-
-    /* Styling for Select Field */
-    .form-select {
-      border-radius: 5px;
-      border: 2px solid #ff1493;
-      margin-bottom: 15px;
-    }
-
-    /* Responsive Styling for the Business Card */
-    .business-card {
-      width: 100%;
-      height: auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .business-card .details {
+    .details-container {
       margin-top: 10px;
-      text-align: center;
     }
 
-    /* Phone Frame (Vertical Layout) */
-    .business-card.vertical {
-      width: 350px;
-      height: 650px;
-      padding: 20px;
-      flex-direction: column;
-      justify-content: flex-start;
-      text-align: center;
+    .horizontal .photo-container,
+    .horizontal .logo-container {
+      flex: 1;
       display: flex;
+      justify-content: center;
     }
 
-    /* Laptop Frame (Horizontal Layout) */
-    .business-card.horizontal {
-      width: 650px;
-      height: 350px;
-      padding: 30px;
-      flex-direction: row;
-      justify-content: space-between;
-      text-align: left;
-      display: flex;
-    }
-
-    .business-card.horizontal .details {
+    .horizontal .details-container {
+      flex: 2;
       margin-left: 20px;
-      margin-top: 0;
     }
 
-    .business-card.horizontal .photo, .business-card.horizontal .logo {
-      width: 120px;
-      height: 120px;
+    input[type="text"],
+    input[type="email"],
+    input[type="file"],
+    select,
+    textarea {
+      transition: all 0.3s ease-in-out;
     }
 
-    .business-card.horizontal .description-box {
-      margin-top: 15px;
-      font-size: 18px;
+    input[type="text"]:hover,
+    input[type="email"]:hover,
+    input[type="file"]:hover,
+    select:hover,
+    textarea:hover {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transform: scale(1.05) rotate(-1deg);
+      background: linear-gradient(90deg, white, yellow, lightgreen, blue);
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="file"]:focus,
+    select:focus,
+    textarea:focus {
+      background: linear-gradient(90deg, white, yellow, lightgreen, blue);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+      transform: scale(1.1) rotate(2deg);
+    }
+
+    .search-container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 15px 45px 15px 15px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .search-input:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+    }
+
+    #searchResults {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .result-item {
+      width: 50px;
+      height: 50px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .result-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   </style>
 </head>
 <body>
-
   <div class="container">
-    <h1>Business Consultancy</h1>
+    <h1 class="my-4 text-center">Enhanced Business Card Generator</h1>
 
-    <!-- Search Bar for Pixabay -->
     <div class="search-container mb-4">
       <input type="text" id="search-bar" class="form-control" placeholder="Search for a photo">
       <div id="photo-results"></div>
     </div>
 
-    <!-- Form -->
-    <form id="businessForm">
+    <form id="cardForm">
       <div class="mb-3">
-        <label for="photo" class="form-label">Upload Personal Photo</label>
-        <input type="file" id="photo" class="form-control" accept="image/*">
+        <label for="personalPhoto" class="form-label">Personal Photo</label>
+        <input type="file" id="personalPhoto" class="form-control" accept="image/*" required>
       </div>
-
       <div class="mb-3">
-        <label for="logo" class="form-label">Upload Company Logo</label>
-        <input type="file" id="logo" class="form-control" accept="image/*">
+        <label for="companyLogo" class="form-label">Company Logo</label>
+        <input type="file" id="companyLogo" class="form-control" accept="image/*" required>
       </div>
-
       <div class="mb-3">
         <label for="companyName" class="form-label">Company Name</label>
-        <input type="text" id="companyName" class="form-control">
+        <input type="text" id="companyName" class="form-control" required>
       </div>
-
+      <div class="mb-3">
+        <label for="fullName" class="form-label">Full Name</label>
+        <input type="text" id="fullName" class="form-control" required>
+      </div>
       <div class="mb-3">
         <label for="email" class="form-label">Email</label>
-        <input type="email" id="email" class="form-control">
+        <input type="email" id="email" class="form-control" required>
       </div>
-
       <div class="mb-3">
         <label for="phone" class="form-label">Phone Number</label>
-        <input type="tel" id="phone" class="form-control">
+        <input type="text" id="phone" class="form-control" required>
       </div>
-
       <div class="mb-3">
-        <label for="frameOption" class="form-label">Frame Orientation</label>
-        <select id="frameOption" class="form-select">
-          <option value="vertical">Vertical (Phone)</option>
-          <option value="horizontal">Horizontal (Laptop)</option>
+        <label for="description" class="form-label">Wishes/Description</label>
+        <textarea id="description" class="form-control" rows="3" placeholder="Add a personal message or description about your company"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="cardType" class="form-label">Card Type</label>
+        <select id="cardType" class="form-select">
+          <option value="vertical">Vertical</option>
+          <option value="horizontal">Horizontal</option>
         </select>
       </div>
-
-      <div class="mb-3">
-        <label for="description" class="form-label">Description / Wishes</label>
-        <textarea id="description" class="form-control" rows="3" placeholder="Enter your wishes or description here (e.g., Happy Diwali to all...)"></textarea>
-      </div>
-
-      <button type="button" id="generateBtn" class="btn btn-primary">Generate Design</button>
+      <button type="button" class="btn btn-primary" onclick="generateCard()">Generate Card</button>
     </form>
-
-    <!-- Preview -->
-    <div id="preview" class="business-card">
-      <img id="photoPreview" class="photo" alt="Personal Photo">
-      <img id="logoPreview" class="logo" alt="Company Logo">
-      <div class="details">
-        <h2 id="companyNamePreview">[Company Name]</h2>
-        <p>Email: <span id="emailPreview">[Email]</span></p>
-        <p>Phone: <span id="phonePreview">[Phone]</span></p>
-        <div class="description-box">
-          <span id="descriptionPreview">[Your wishes or description will appear here]</span>
-        </div>
-      </div>
-    </div>
+    <div id="preview" class="mt-4"></div>
   </div>
 
   <script>
@@ -274,6 +239,7 @@
           const img = document.createElement("img");
           img.src = image.webformatURL;
           img.alt = image.tags;
+          img.className = "result-item";
           img.addEventListener("click", function () {
             selectedBackground = img.src;
             document.getElementById("preview").style.backgroundImage = `url(${selectedBackground})`;
@@ -286,26 +252,50 @@
       }
     });
 
-    document.getElementById("generateBtn").addEventListener("click", function () {
-      document.getElementById("photoPreview").src = document.getElementById("photo").files[0] ? URL.createObjectURL(document.getElementById("photo").files[0]) : "https://via.placeholder.com/120";
-      document.getElementById("logoPreview").src = document.getElementById("logo").files[0] ? URL.createObjectURL(document.getElementById("logo").files[0]) : "https://via.placeholder.com/120";
+    function generateCard() {
+      const personalPhoto = document.getElementById('personalPhoto').files[0];
+      const companyLogo = document.getElementById('companyLogo').files[0];
+      const companyName = document.getElementById('companyName').value;
+      const fullName = document.getElementById('fullName').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const description = document.getElementById('description').value;
+      const cardType = document.getElementById('cardType').value;
 
-      document.getElementById('companyNamePreview').textContent = document.getElementById('companyName').value.trim() || "Your Company Name";
-      document.getElementById('emailPreview').textContent = document.getElementById('email').value.trim() || "your.email@example.com";
-      document.getElementById('phonePreview').textContent = document.getElementById('phone').value.trim() || "123-456-7890";
-      document.getElementById('descriptionPreview').textContent = document.getElementById('description').value.trim() || "Your description here...";
-
-      if (selectedBackground) {
-        document.getElementById("preview").style.backgroundImage = `url(${selectedBackground})`;
-      } else {
-        document.getElementById("preview").style.backgroundImage = "none";
+      if (!personalPhoto || !companyLogo || !companyName || !fullName || !email || !phone) {
+        alert("Please fill out all required fields and upload the required images.");
+        return;
       }
 
-      const frameOrientation = document.getElementById('frameOption').value;
-      const previewDiv = document.getElementById("preview");
-      previewDiv.classList.remove("vertical", "horizontal");
-      previewDiv.classList.add(frameOrientation);
-    });
+      const reader1 = new FileReader();
+      const reader2 = new FileReader();
+
+      reader1.onload = function (e1) {
+        reader2.onload = function (e2) {
+          const cardHtml = `
+            <div class="business-card ${cardType}" style="background-image: url('${selectedBackground || ''}');">
+              <div class="photo-container">
+                <img src="${e1.target.result}" alt="Personal Photo">
+              </div>
+              <div class="details-container">
+                <h2>${companyName}</h2>
+                <p><strong>${fullName}</strong></p>
+                <p>Email: ${email}</p>
+                <p>Phone: ${phone}</p>
+                <p>${description}</p>
+              </div>
+              <div class="logo-container">
+                <img src="${e2.target.result}" alt="Company Logo">
+              </div>
+            </div>
+          `;
+
+          document.getElementById('preview').innerHTML = cardHtml;
+        };
+        reader2.readAsDataURL(companyLogo);
+      };
+      reader1.readAsDataURL(personalPhoto);
+    }
   </script>
 </body>
 </html>
