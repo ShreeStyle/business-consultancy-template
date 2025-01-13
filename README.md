@@ -17,10 +17,6 @@ A simple and user-friendly web-based tool that allows users to create a custom b
 - **Real-time Preview**: See the card being created in real time as you fill in the form and upload images.
 - **Interactive Elements**: The tool provides hover and focus effects on form elements for a smooth user experience.
 
-## Demo
-
-You can view a live demo of the **Business Marketing Helper Tool** by visiting [this link](#).
-
 ## Getting Started
 
 ### Prerequisites
